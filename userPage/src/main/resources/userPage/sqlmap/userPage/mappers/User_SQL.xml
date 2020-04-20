@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userPage.userList.service.impl.UserMapper">
+    
+    <!-- <typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="userVO" type="userPage.userList.service.UserVO"/> -->
+    
+	<resultMap id="sample" type="userPage.userList.service.UserVO">
+		<result property="obid" column="OBID"/>
+		<result property="createdOn" column="CREATED_ON"/>
+		<result property="modifiedOn" column="MODIFIED_ON"/>
+		<result property="userId" column="USER_ID"/>
+		<result property="name" column="NAME"/>
+		<result property="email" column="EMAIL"/>
+		<result property="userType" column="USER_TYPE"/>
+		<result property="pwd" column="PWD"/>
+	</resultMap>
+
+	<select id="selectUserList" parameterType="userVO" resultMap="sample"> 
+			SELECT
+				OBID, CREATED_ON, MODIFIED_ON, USER_ID, NAME, EMAIL, PWD, USER_TYPE
+			FROM t_user
+			WHERE 1=1
+			ORDER BY CREATED_ON DESC
+	</select>
+	
+	<insert id="insertUser" parameterType="userVO">
+
+			INSERT INTO t_user
+				( OBID
+				  , CREATED_ON
+				  , USER_ID
+				  , PWD
+				  , NAME
+				  , EMAIL
+				  , USER_TYPE 
+				  )
+			VALUES ( #{obid}
+				  , #{createdOn}
+				  , #{userId}
+				  , #{pwd}
+				  , #{name}
+				  , #{email}
+				  , #{userType}
+				  )
+
+	</insert>
+	
+	<select id="selectUser" parameterType="userVO" resultMap="sample"> 
+			SELECT
+				OBID, CREATED_ON, MODIFIED_ON, USER_ID, NAME, EMAIL, PWD, USER_TYPE
+			FROM t_user
+			WHERE OBID=#{obid}
+	</select>
+	
+	<delete id="deleteUser">
+
+			DELETE FROM t_user
+			WHERE OBID=#{obid}
+
+	</delete>
+	
+	<update id="updateUser">
+
+			UPDATE t_user
+			SET NAME=#{name}
+				, EMAIL=#{email}
+				, USER_TYPE=#{userType}
+				<if test="pwd != null and pwd != ''">
+					, PWD=#{pwd}
+				</if>
+				, MODIFIED_ON=#{modifiedOn}
+			WHERE OBID=#{obid}
+	</update>
+</mapper>
